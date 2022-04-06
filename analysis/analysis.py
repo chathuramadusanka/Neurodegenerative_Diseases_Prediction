@@ -2,6 +2,7 @@ import pandas as pd
 
 
 def analysis_common(file_1_name, file_2_name, file_3_name, file_4_name):
+    # loding CSV files into dataframes
     try:
         df_1 = pd.read_csv('results/summary/short_summary/' + file_1_name + '.csv')  # abeta ==> proteome
     except:
@@ -22,6 +23,7 @@ def analysis_common(file_1_name, file_2_name, file_3_name, file_4_name):
     except:
         df_4 = pd.DataFrame()
 
+    # get all intersecting protein id s with dataframes
     compare_1 = set(df_1['protein_id']).intersection(df_2['protein_id'])  # abeta ==> proteome + tau ==> proteome
     compare_2 = set(df_3['protein_id']).intersection(df_1['protein_id'])  # abeta ==> proteome + abeta ==> neuro
     compare_3 = set(df_2['protein_id']).intersection(df_4['protein_id'])  # tau ==> proteome + tau ==> neuro
@@ -31,8 +33,10 @@ def analysis_common(file_1_name, file_2_name, file_3_name, file_4_name):
 
     print(compare_1)
 
+    # filtering out all the details that contain intersected protein ID's
     data_1 = pd.concat([df_1.query('protein_id in @compare_1'), df_2.query('protein_id in @compare_1')],
                        ignore_index=True)
+    # removing duplicates in dataframe
     data_1_1 = data_1.drop_duplicates(
         subset=["Unnamed: 0", "Reference_sequence_segment", "case details", "protein_id", "matching_frequency"])
 
@@ -69,7 +73,7 @@ def analysis_common(file_1_name, file_2_name, file_3_name, file_4_name):
     data_1_7 = data_7.drop_duplicates(
         subset=["Unnamed: 0", "Reference_sequence_segment", "case details", "protein_id", "matching_frequency"])
 
-    unique_dogs = data_7.drop_duplicates(
+    unique_for_all = data_7.drop_duplicates(
         subset=["Unnamed: 0", "Reference_sequence_segment", "case details", "protein_id", "matching_frequency"])
 
     print(data_1)
