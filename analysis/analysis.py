@@ -1,8 +1,20 @@
 import pandas as pd
+from matplotlib import pyplot as plt
 
 
+# defining plotting function
+def plot(table):
+    plt.rcParams["figure.figsize"] = [20, 15]
+    table.plot(kind="bar")
+    plt.title("Total Matching Frequency vs Protein Sequence Segments")
+    plt.xlabel("Protein Sequence Segment")
+    plt.ylabel("Matching Frequency")
+    plt.show()
+
+
+# defining analysis function to analyse all the extracted results through the datasets
 def analysis_common(file_1_name, file_2_name, file_3_name, file_4_name):
-    # loding CSV files into dataframes
+    # loading CSV files into dataframes =============================================================
     try:
         df_1 = pd.read_csv('results/summary/short_summary/' + file_1_name + '.csv')  # abeta ==> proteome
     except:
@@ -23,7 +35,9 @@ def analysis_common(file_1_name, file_2_name, file_3_name, file_4_name):
     except:
         df_4 = pd.DataFrame()
 
-    # get all intersecting protein id s with dataframes
+    # ====================================================================================================
+
+    # get all intersecting protein id s with all the imported dataframes
     compare_1 = set(df_1['protein_id']).intersection(df_2['protein_id'])  # abeta ==> proteome + tau ==> proteome
     compare_2 = set(df_3['protein_id']).intersection(df_1['protein_id'])  # abeta ==> proteome + abeta ==> neuro
     compare_3 = set(df_2['protein_id']).intersection(df_4['protein_id'])  # tau ==> proteome + tau ==> neuro
@@ -31,7 +45,7 @@ def analysis_common(file_1_name, file_2_name, file_3_name, file_4_name):
     compare_5 = set(df_1['protein_id']).intersection(df_4['protein_id'])  # abeta ==> proteome + tau ==> neuro
     compare_6 = set(df_2['protein_id']).intersection(df_3['protein_id'])  # tau ==> proteome + abeta ==> neuro
 
-    print(compare_1)
+    # print(compare_1)
 
     # filtering out all the details that contain intersected protein ID's
     data_1 = pd.concat([df_1.query('protein_id in @compare_1'), df_2.query('protein_id in @compare_1')],
@@ -73,10 +87,9 @@ def analysis_common(file_1_name, file_2_name, file_3_name, file_4_name):
     data_1_7 = data_7.drop_duplicates(
         subset=["Unnamed: 0", "Reference_sequence_segment", "case details", "protein_id", "matching_frequency"])
 
-    unique_for_all = data_7.drop_duplicates(
-        subset=["Unnamed: 0", "Reference_sequence_segment", "case details", "protein_id", "matching_frequency"])
+    # =============================================================================================================
 
-    print(data_1)
+    # contain all the intersections with common matching sequence segments
 
     compare_1_seq = set(df_1['Reference_sequence_segment']).intersection(
         df_2['Reference_sequence_segment'])  # abeta ==>
@@ -144,31 +157,85 @@ def analysis_common(file_1_name, file_2_name, file_3_name, file_4_name):
     data_1_7_seq = data_7_seq.drop_duplicates(
         subset=["Unnamed: 0", "Reference_sequence_segment", "case details", "protein_id", "matching_frequency"])
 
-    unique_for_all_seq = data_7_seq.drop_duplicates(
-        subset=["Unnamed: 0", "Reference_sequence_segment", "case details", "protein_id", "matching_frequency"])
+    # =========================================================================================================
 
-    print(data_1_seq)
+    # sending all the analysis data to the CSV files
+
+    # path for the protein id intersection analysis
     csv_path_id = 'results/analysis/pro_id/'
+
+    # path for the protein sequence segment intersection analysis
     csv_path_seq = 'results/analysis/pro_seq/'
 
-    data_1_1.to_csv(csv_path_id + file_1_name + 'analysis_with' + file_2_name, index=True)
-    data_1_1_seq.to_csv(csv_path_seq + file_1_name + 'analysis_seq_with' + file_2_name, index=True)
+    data_1_1.to_csv(csv_path_id + file_1_name + 'analysis_with' + file_2_name + '.csv', index=True)
+    data_1_1_seq.to_csv(csv_path_seq + file_1_name + 'analysis_seq_with' + file_2_name + '.csv', index=True)
 
-    data_1_2.to_csv(csv_path_id + file_1_name + 'analysis_with' + file_3_name, index=True)
-    data_1_2_seq.to_csv(csv_path_seq + file_1_name + 'analysis_seq_with' + file_3_name, index=True)
+    data_1_2.to_csv(csv_path_id + file_1_name + 'analysis_with' + file_3_name + '.csv', index=True)
+    data_1_2_seq.to_csv(csv_path_seq + file_1_name + 'analysis_seq_with' + file_3_name + '.csv', index=True)
 
-    data_1_3.to_csv(csv_path_id + file_2_name + 'analysis_with' + file_4_name, index=True)
-    data_1_3_seq.to_csv(csv_path_seq + file_2_name + 'analysis_seq_with' + file_4_name, index=True)
+    data_1_3.to_csv(csv_path_id + file_2_name + 'analysis_with' + file_4_name + '.csv', index=True)
+    data_1_3_seq.to_csv(csv_path_seq + file_2_name + 'analysis_seq_with' + file_4_name + '.csv', index=True)
 
-    data_1_4.to_csv(csv_path_id + file_3_name + 'analysis_with' + file_4_name, index=True)
-    data_1_4_seq.to_csv(csv_path_seq + file_3_name + 'analysis_seq_with' + file_4_name, index=True)
+    data_1_4.to_csv(csv_path_id + file_3_name + 'analysis_with' + file_4_name + '.csv', index=True)
+    data_1_4_seq.to_csv(csv_path_seq + file_3_name + 'analysis_seq_with' + file_4_name + '.csv', index=True)
 
-    data_1_5.to_csv(csv_path_id + file_1_name + 'analysis_with' + file_4_name, index=True)
-    data_1_5_seq.to_csv(csv_path_seq + file_1_name + 'analysis_seq_with' + file_4_name, index=True)
+    data_1_5.to_csv(csv_path_id + file_1_name + 'analysis_with' + file_4_name + '.csv', index=True)
+    data_1_5_seq.to_csv(csv_path_seq + file_1_name + 'analysis_seq_with' + file_4_name + '.csv', index=True)
 
-    data_1_6.to_csv(csv_path_id + file_2_name + 'analysis_with' + file_3_name, index=True)
-    data_1_6_seq.to_csv(csv_path_seq + file_2_name + 'analysis_seq_with' + file_3_name, index=True)
+    data_1_6.to_csv(csv_path_id + file_2_name + 'analysis_with' + file_3_name + '.csv', index=True)
+    data_1_6_seq.to_csv(csv_path_seq + file_2_name + 'analysis_seq_with' + file_3_name + '.csv', index=True)
 
-    data_1_7.to_csv(csv_path_id + 'analysis_with_4_results', index=True)
-    data_1_7_seq.to_csv(csv_path_seq + 'analysis_seq_with_4_dataframes', index=True)
+    data_1_7.to_csv(csv_path_id + 'analysis_with_4_results.csv', index=True)
+    data_1_7_seq.to_csv(csv_path_seq + 'analysis_seq_with_4_dataframes.csv', index=True)
 
+    # ====================================================================================================
+
+    # adding all the dataframes into one list
+    frames = [df_1, df_2, df_3, df_4]
+
+    # concat all the frames into one dataframe
+    full_list = pd.concat(frames)
+
+    # dropping duplicate records of dataframe
+    unique_full_list = full_list.drop_duplicates(
+        subset=["Unnamed: 0", "Reference_sequence_segment", "case details", "protein_id", "matching_frequency"])
+
+    # print(unique_full_list)
+
+    # get the all the matching sequences into one place( unique_full_list) with all the datasets and export to CSV file
+    csv_path_all = 'results/analysis/'
+    unique_full_list.to_csv(csv_path_all + 'all_in_4_matched_dataframes.csv', index=True)
+
+    # =========================================================================================================
+    # plotting frequency of matching sequences
+
+    # dropping Unnamed:0 and "case detail" columns form dataframe
+    table = unique_full_list.drop(columns=["Unnamed: 0", "case details"])
+
+    # Calculating the total sum of each matching frequency of reference sequence segment
+    table['total_matching'] = unique_full_list.groupby(['Reference_sequence_segment'])[
+        'matching_frequency'].transform('sum')
+
+    # dropping matching sequence column
+    table = table.drop(columns=["matching_frequency"])
+
+    # droping duplicates considering both reference sequence segment and total matching sequence
+    table = table.drop_duplicates(
+        subset=["Reference_sequence_segment", "total_matching"])
+
+    print(table.dtypes)
+    table = table.drop(columns=["protein_id"])
+    table.set_index('Reference_sequence_segment', inplace=True)
+
+    table1 = table
+    initial_point = 0
+    for items in range(80, len(table1), 80):
+        if (len(table1) - items) >= 80:
+            table = table1.iloc[initial_point:items, :]
+            print(initial_point, (items))
+            plot(table)
+        else:
+            print(initial_point, (len(table1)))
+            table = table1.iloc[initial_point:len(table1), :]
+            plot(table)
+        initial_point = items
