@@ -82,6 +82,7 @@ def refence_seq_pattern(lowest_seq_combination, initial_case, table_name, refere
 # defining method to compare sequences
 def compare_sequences(grabed_sequene, low_com, seq_comp_list, compare_seq_dict, case_details):
     # process flow 2
+
     # reference sequence combination that pass form reference_seq_pattern method
     grabed_sequene = grabed_sequene
     grabed_sequene_rev = grabed_sequene[::-1]
@@ -146,7 +147,7 @@ def compare_sequences(grabed_sequene, low_com, seq_comp_list, compare_seq_dict, 
     # print("original", match_frequency, "reverse", match_frequency_reverse)
     gc.collect()
     return last_result
-    # retun to process flow 1
+    # return to process flow 1
 
 
 def count_occurrences(full_sequence, grab_sequence):
