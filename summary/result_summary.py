@@ -18,8 +18,7 @@ def dataframe_summarizing(open_csv_file_name, output_csv_save_name, exclude_id):
 
     col_list = df_filter_cols.columns
 
-
-    # create empty dataframe to get get filtered row details
+    # create empty dataframe to get filtered row details
     result = pd.DataFrame(columns=col_list)
     print(result)
 
@@ -60,5 +59,3 @@ def dataframe_summarizing(open_csv_file_name, output_csv_save_name, exclude_id):
     summary = summary[summary.protein_id != exclude_id]
     # saving short summary to the location
     summary.to_csv('results/summary/short_summary/' + output_csv_save_name + '.csv', index=True)
-
-
