@@ -36,13 +36,13 @@ def data_retrive(table_name):
     sequence_list_name = []
     full_dict = {}
     full_list = []
-    # quary_search = 'SELECT * FROM "{}"'.fromat(table_name)
+    # quary_search = 'SELECT * FROM "{}"'.format(table_name)
 
     try:
         # take all the meta tags with all the datatypes and sizes that defined
         # cursor.execute("PRAGMA table_info(protein_seq_1)")
 
-        # select all the records in the database rocord where some colum quals to something using variable methods
+        # select all the records in the database record where some colum equals to something using variable methods'
         # cursor.execute('SELECT Sequenceid, Sequence FROM {}'.format(table_name))
 
         cursor.execute('SELECT * FROM {}'.format(table_name))
