@@ -129,7 +129,6 @@ def compare_sequences(grabed_sequene, low_com, seq_comp_list, compare_seq_dict, 
     # all the results in one variable which is a dictionary  # this needs complex procedure when extracting results
     # last_result = dict(zip(column_name_list, zip(match_frequency, match_frequency_reverse)))
 
-
     # using this method we can simply create a variable independent dictionary
     last_result = DefaultDict(dict)
     for case, grb_seq, col_name, matc_fre, rev_fre in zip(case_details_list, grabed_sequene_list, column_name_list,
@@ -138,11 +137,6 @@ def compare_sequences(grabed_sequene, low_com, seq_comp_list, compare_seq_dict, 
         last_result["id"]["Reference_sequence_segment"] = grb_seq
         last_result["id"][col_name] = matc_fre
         # last_result["id"][column_name] = rev_fre
-
-        """last_result["sequence_segement"] = grb_seq
-        last_result["protein_id"] = col_name
-        last_result["match_frequency"] = matc_fre
-        last_result["reverse_frequency"] = rev_fre"""
 
     # print(column_name_list)
     # print(seq_comp_list[0:2])
