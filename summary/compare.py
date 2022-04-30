@@ -9,40 +9,40 @@ from summary.retreve_data import data_retrive
 def refence_seq_pattern(lowest_seq_combination, initial_case, table_name, reference_table):
     # process flow 1
 
-    # retreve reference frequency from  retreve.py  
+    # retrieve reference frequency from  retreve_data.py
     sequence_list, reference_dict = data_retrive(reference_table)
     # sequence_list = ["protein_id", "123456789x"]
 
-    # retreve data from the compare protein sequences database tables only to pass into the other method
+    # retrieve data from the compare protein sequences database tables only to pass into the other method
     seq_comp_list, seq_com_dict = data_retrive(table_name)
     seq_comp_list = seq_comp_list[0:]  # in case if need to control the list
     # print(seq_comp_list)
     # seq_com_dict = {'id_01' : '54671234512345', "id_02": "01234565789x"}
 
-    # get only the amolyid beta sequence
+    # get only the amyloid beta sequence
     ref_seq = sequence_list[0]
     print(ref_seq)
-    ref_length = len(ref_seq)  # get the length of the beta amaloid sequence
+    ref_length = len(ref_seq)  # get the length of the beta amyloid sequence
     ref_indexes = (ref_length)  # total number of indexes thinking it is a list
     # print(ref_length, ref_indexes)
 
-    # initializing lowest sequence combination
-    # means that what is the minimum number of charcters should be there in any cobination
+    # initializing the lowest sequence combination
+    # means that what is the minimum number of characters should be there in any combination
     low_com = lowest_seq_combination + 1
 
-    # crating and initalizing case variables
+    # crating and initializing case variables
     inital_case = initial_case
     max_cases = ref_indexes  # total number of indexes assing to max cases
     cases_to_run = (max_cases - (low_com - 1))  # total number fo cases need to run
     sequence_grab_list = []  # all the sequence combinations will be added
-    all_count_details_list = []  # all count detalis and collection of all the dictionaries list
+    all_count_details_list = []  # all count details and collection of all the dictionaries list
 
     animation = ["[■□□□□□□□□□]", "[■■□□□□□□□□]", "[■■■□□□□□□□]", "[■■■■□□□□□□]", "[■■■■■□□□□□]", "[■■■■■■□□□□]",
                  "[■■■■■■■□□□]", "[■■■■■■■■□□]", "[■■■■■■■■■□]", "[■■■■■■■■■■]"]
 
     for cases in range(ref_length - inital_case):
         iteration_count = 0  # iteration count is initialize to 0 at outer loop
-        back_iteration = inital_case  # back iteration is redusing form its inital case to  bottomwords
+        back_iteration = inital_case  # back iteration is reusing form its initial case to  bottom words
 
         time.sleep(0.2)
         sys.stdout.write("\r" + animation[cases % len(animation)])
@@ -57,14 +57,14 @@ def refence_seq_pattern(lowest_seq_combination, initial_case, table_name, refere
                     # print("case_%s" %inital_case,inital_case, iteration_count, sequence_grab)
                     sequence_grab_list.append(sequence_grab)
 
-                    # passing data to compare_seq mehtod and returning summery details and getting output from
+                    # passing data to compare_seq method and returning summery details and getting output from
                     # process flow 2 : output is a dictionary
                     case_details = ("case_%s" % inital_case)
                     all_count_details = compare_sequences(sequence_grab, low_com, seq_comp_list, seq_com_dict,
                                                           case_details)
 
                     # adding this loop case details and sequence to the dictionary
-                    # this addition is no longer required besause it has been alrady addend in the previous mehtod 
+                    # this addition is no longer required because it has been already addend in the previous method
                     # returned details
                     # all_count_details["Ref_seq_combination"] = ["case_%s" %inital_case, sequence_grab]
 
@@ -79,7 +79,7 @@ def refence_seq_pattern(lowest_seq_combination, initial_case, table_name, refere
     return all_count_details_list
 
 
-# defining method to compare sequenes
+# defining method to compare sequences
 def compare_sequences(grabed_sequene, low_com, seq_comp_list, compare_seq_dict, case_details):
     # process flow 2
     # reference sequence combination that pass form reference_seq_pattern method
@@ -87,39 +87,39 @@ def compare_sequences(grabed_sequene, low_com, seq_comp_list, compare_seq_dict, 
     grabed_sequene_rev = grabed_sequene[::-1]
     len_grab = len(grabed_sequene)
 
-    # this is the small part of the sequence that get form the grabed_sequence
+    # this is the small part of the sequence that get form the grabbed_sequence
     sequence_part1 = grabed_sequene[0:low_com - 1]
 
-    # geting the reverse complement of the sequence_part1
+    # getting the reverse complement of the sequence_part1
     sequence_part2 = sequence_part1[::-1]
 
     # this dict items contains both protein sequnce id and sequence itself
     comp_dict_items = compare_seq_dict.items()
 
-    # initalising match frquency to 0
+    # initialising match frequency to 0
     match_frequency = []
     match_frequency_reverse = []
     column_name_list = []
     case_details_list = []
     grabed_sequene_list = []
 
-    # geting extracted protein column name list as x and sequence as y  in seperate variables
+    # getting extracted protein column name list as x and sequence as y  in separate variables
     for column_name, seq_comp in comp_dict_items:
 
         count = 0
         reversed_count = 0
 
-        # check whether the sequcne_part1 is equal to he given / selected_sequence
+        # check whether the sequence_part1 is equal to the given / selected_sequence
         if seq_comp.find(sequence_part1) != -1:
-            # get the sequence match count to the specific referne sequence
+            # get the sequence match count to the specific reference sequence
             count = count_occurrences(seq_comp, grabed_sequene)
 
-        # check whether the sequence_part2 is equal to the given / selectd sequence
+        # check whether the sequence_part2 is equal to the given / selected sequence
         if seq_comp.find(sequence_part2) != -1:
             reversed_count = count_occurrences(seq_comp, grabed_sequene_rev)
             count = reversed_count + count
 
-        # adding each values to lists throuout the iteration
+        # adding each values to list throughout the iteration
         match_frequency.append(count)
         match_frequency_reverse.append(reversed_count)
         column_name_list.append(column_name)
@@ -129,12 +129,12 @@ def compare_sequences(grabed_sequene, low_com, seq_comp_list, compare_seq_dict, 
     # all the results in one variable which is a dictionary  # this needs complex procedure when extracting results
     # last_result = dict(zip(column_name_list, zip(match_frequency, match_frequency_reverse)))
 
-    # using this code it can generate a dictionary inside a list 
+    # using this code it can generate a dictionary inside a list
     # last_result = [{case_details:{column_name: {'Match frequency': match_frequency, 'reverse_frequency': match_frequency_reverse}}} \
     #    for (case_details, column_name, match_frequency, match_frequency_reverse) in zip(case_details_list, column_name_list, match_frequency, match_frequency_reverse)]
 
-    # using this method we can simply create a variable indipendent dictionary but this is not a nested dictionary
-    # need to find a best way 
+    # using this method we can simply create a variable independent dictionary but this is not a nested dictionary
+    # need to find the best way
     last_result = DefaultDict(dict)
     for case, grb_seq, col_name, matc_fre, rev_fre in zip(case_details_list, grabed_sequene_list, column_name_list,
                                                           match_frequency, match_frequency_reverse):
