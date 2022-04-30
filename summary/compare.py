@@ -15,7 +15,7 @@ def refence_seq_pattern(lowest_seq_combination, initial_case, table_name, refere
 
     # retrieve data from the compare protein sequences database tables only to pass into the other method
     seq_comp_list, seq_com_dict = data_retrive(table_name)
-    seq_comp_list = seq_comp_list[0:]  # in case if need to control the list
+    seq_comp_list = seq_comp_list[0:]  # in case if you need to control the list you can change the attributes inside[]
     # print(seq_comp_list)
     # seq_com_dict = {'id_01' : '54671234512345', "id_02": "01234565789x"}
 
@@ -129,12 +129,8 @@ def compare_sequences(grabed_sequene, low_com, seq_comp_list, compare_seq_dict, 
     # all the results in one variable which is a dictionary  # this needs complex procedure when extracting results
     # last_result = dict(zip(column_name_list, zip(match_frequency, match_frequency_reverse)))
 
-    # using this code it can generate a dictionary inside a list
-    # last_result = [{case_details:{column_name: {'Match frequency': match_frequency, 'reverse_frequency': match_frequency_reverse}}} \
-    #    for (case_details, column_name, match_frequency, match_frequency_reverse) in zip(case_details_list, column_name_list, match_frequency, match_frequency_reverse)]
 
-    # using this method we can simply create a variable independent dictionary but this is not a nested dictionary
-    # need to find the best way
+    # using this method we can simply create a variable independent dictionary
     last_result = DefaultDict(dict)
     for case, grb_seq, col_name, matc_fre, rev_fre in zip(case_details_list, grabed_sequene_list, column_name_list,
                                                           match_frequency, match_frequency_reverse):
