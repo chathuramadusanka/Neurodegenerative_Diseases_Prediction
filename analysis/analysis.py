@@ -230,7 +230,6 @@ def analysis_common(file_1_name, file_2_name, file_3_name, file_4_name):
     print(table.dtypes)
     table = table.drop(columns=["protein_id"])
 
-
     # defining method to return hydrophobic values of sequences to the dataframe
     def get_hydrophobicity(df_row):
         single_seq = df_row["Reference_sequence_segment"]
@@ -299,4 +298,3 @@ def analysis_common(file_1_name, file_2_name, file_3_name, file_4_name):
     hydrophobicity.to_csv(csv_path_stability + 'hydrophobicity.csv', index=True)
     instability_index.to_csv(csv_path_stability + 'instability_index.csv', index=True)
     iso_fil2.to_csv(csv_path_stability + 'all_filters_at_once.csv', index=True)
-
