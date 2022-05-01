@@ -1,15 +1,19 @@
 import pandas as pd
-from matplotlib import pyplot as plt
+# hydrophobicity, pI value and instability index
+import peptides
+# from Bio.SeqUtils.IsoelectricPoint import IsoelectricPoint as IP
 
+# for plotting sequences using plotly
+import plotly.express as px
 
-# defining plotting function
+"""# defining plotting function
 def plot(table):
     plt.rcParams["figure.figsize"] = [20, 15]
     table.plot(kind="bar")
     plt.title("Total Matching Frequency vs Protein Sequence Segments")
     plt.xlabel("Protein Sequence Segment")
     plt.ylabel("Matching Frequency")
-    plt.show()
+    plt.show()"""
 
 
 # defining analysis function to analyse all the extracted results through the datasets
@@ -219,23 +223,80 @@ def analysis_common(file_1_name, file_2_name, file_3_name, file_4_name):
     # dropping matching sequence column
     table = table.drop(columns=["matching_frequency"])
 
-    # droping duplicates considering both reference sequence segment and total matching sequence
+    # dropping duplicates considering both reference sequence segment and total matching sequence
     table = table.drop_duplicates(
         subset=["Reference_sequence_segment", "total_matching"])
 
     print(table.dtypes)
     table = table.drop(columns=["protein_id"])
+
+
+    # defining method to return hydrophobic values of sequences to the dataframe
+    def get_hydrophobicity(df_row):
+        single_seq = df_row["Reference_sequence_segment"]
+        peptide = peptides.Peptide(single_seq)
+        hydrophobicity = peptide.hydrophobicity(scale="KyteDoolittle")
+        return hydrophobicity
+
+    # defining method to return pI values of sequences to the dataframe
+    def get_isoelectric(df_row):
+        single_seq = df_row["Reference_sequence_segment"]
+        peptide = peptides.Peptide(single_seq)
+        isoelectic_point = peptide.isoelectric_point(pKscale="EMBOSS")
+
+        """# The pI is a variable that affects the solubility of the peptides under
+            # certain conditions of pH. When the pH of the solvent is equal to the pI of the protein,
+            # it tends to precipitate and lose its biological function."""
+
+        return isoelectic_point
+
+    # defining method to return instability index values of sequences to the dataframe
+    def get_instability(df_row):
+        single_seq = df_row["Reference_sequence_segment"]
+        peptide = peptides.Peptide(single_seq)
+        instability = peptide.instability_index()
+
+        """If instability index <= 40 the protein is stable"""
+
+        return instability
+
+    # defining method to return length of sequences to the dataframe
+    def get_length(df_row):
+        single_seq = df_row["Reference_sequence_segment"]
+        length = len(single_seq)
+        return length
+
+    # defining method to return charge of sequences to the dataframe
+    def get_charge(df_row):
+        single_seq = df_row["Reference_sequence_segment"]
+        peptide = peptides.Peptide(single_seq)
+        charge = peptide.charge(pKscale="Lehninger")
+        return charge
+
+    table['hydrophobicity'] = table.apply(get_hydrophobicity, axis=1)
+    table["isoelectic_point"] = table.apply(get_isoelectric, axis=1)
+    table["instability"] = table.apply(get_instability, axis=1)
+    table["length"] = table.apply(get_length, axis=1)
+    table["charge"] = table.apply(get_charge, axis=1)
+
     table.set_index('Reference_sequence_segment', inplace=True)
 
-    table1 = table
-    initial_point = 0
-    for items in range(80, len(table1), 80):
-        if (len(table1) - items) >= 80:
-            table = table1.iloc[initial_point:items, :]
-            print(initial_point, (items))
-            plot(table)
-        else:
-            print(initial_point, (len(table1)))
-            table = table1.iloc[initial_point:len(table1), :]
-            plot(table)
-        initial_point = items
+    max_length = table[table["length"] >= 13].sort_values("length")
+    higest_matching = table[table["total_matching"] > 14].sort_values("total_matching")
+    isoelectic_aggregates = table[table["isoelectic_point"].between(6.0, 8.8)].sort_values("isoelectic_point")
+    hydrophobicity = table[table["hydrophobicity"] > 0].sort_values("hydrophobicity")
+    instability_index = table[table["instability"] < 40].sort_values("instability")
+    all_filter = table.query('instability < 40 & hydrophobicity > 0 & isoelectic_point.between(6.0, 8.8)').sort_values(
+        "isoelectic_point")
+    iso_fil2 = all_filter.drop(columns=["total_matching", "charge", "length"])
+    iso_fil2.rename(columns={'hydrophobicity': 'Hydrophobicity', 'isoelectic_point': 'pI value',
+                             'instability	': 'instability index '}, inplace=True)
+
+    csv_path_stability = 'results/analysis/stability/'
+    max_length.to_csv(csv_path_stability + 'max_length.csv', index=True)
+    higest_matching.to_csv(csv_path_stability + 'highest_matching.csv', index=True)
+    isoelectic_aggregates.to_csv(csv_path_stability + 'pi.csv', index=True)
+    hydrophobicity.to_csv(csv_path_stability + 'hydrophobicity.csv', index=True)
+    instability_index.to_csv(csv_path_stability + 'instability_index.csv', index=True)
+    iso_fil2.to_csv(csv_path_stability + 'all_filters_at_once.csv', index=True)
+
