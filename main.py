@@ -30,7 +30,7 @@ if __name__ == '__main__':
     # exclude_id sp|P05067|A4_HUMAN for human tau
     # exclude_id sp|P10636|TAU_HUMAN for amyloid beta
 
-    # dataframe_summerizing('path of the raw data file', 'path to save new summary file', 'exlude_id') should be given
+    # dataframe_summarizing('path of the raw data file', 'path to save new summary file', 'exlude_id') should be given
     # dataframe_summarizing('human_proteins_with_abeta', 'human_proteins_with_abeta_sumary', "sp|P05067|A4_HUMAN")
     # dataframe_summarizing('human_proteins_with_humantau', 'human_proteins_with_humantau_sumary', "sp|P10636|TAU_HUMAN")
     # dataframe_summarizing('neuro_with_abeta', 'neuro_with_abeta_sumary', "sp|P05067|A4_HUMAN")
