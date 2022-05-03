@@ -13,7 +13,7 @@ def dataframe_summarizing(open_csv_file_name, output_csv_save_name, exclude_id):
 
     df_remove_zero = df_cols.loc[:, [(df_cols[col] > 0).any() for col in df_cols.columns]]
 
-    # recombine slized dataframe row wise
+    # recombine sliced dataframe row wise
     df_filter_cols = pd.concat([df_initial_col.reset_index(drop=True), df_remove_zero], axis=1)
 
     col_list = df_filter_cols.columns
@@ -40,7 +40,7 @@ def dataframe_summarizing(open_csv_file_name, output_csv_save_name, exclude_id):
     # filtering data to get short summary
     summary = pd.DataFrame(columns=["Reference_sequence_segment", "case details", "protein_id"])
     for col_names in result.columns:
-        # exepting columns that contain reference sequence segment and case details to filter nonzero records
+        # excepting columns that contain reference sequence segment and case details to filter nonzero records
         if col_names != 'Reference_sequence_segment' and col_names != 'case details':
             # choosing rows that contain matching frequency grater than 1
             df_filtered_row_sumery = result[result[col_names] >= 1]
