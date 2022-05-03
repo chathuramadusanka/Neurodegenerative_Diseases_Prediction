@@ -23,7 +23,7 @@ def generate_summary(lowest_num_of_residues, starting_case, database_tabel_name,
     # creating dataframe using pandas jason normalizer and passing variables; used to extract data from nested
     # dictionary df = pd.json_normalize(all_count_details_dictionary, record_path=None)
 
-    # creating pandas dataframe using concat mehtod to extract data from dictionary
+    # creating pandas dataframe using concat method to extract data from dictionary
     df = pd.concat([pd.DataFrame(l) for l in all_count_details_dictionary], axis=1).T
 
     # saving the dataframe to the csv file
