@@ -9,7 +9,7 @@ def dataframe_summarizing(open_csv_file_name, output_csv_save_name, exclude_id):
     df_cols = df.iloc[:, 3:]
     df_initial_col = df.iloc[:, 1:3]
 
-    # filter colums that contains even one value grater than zero
+    # filter columns that contains even one value grater than zero
 
     df_remove_zero = df_cols.loc[:, [(df_cols[col] > 0).any() for col in df_cols.columns]]
 
